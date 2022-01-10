@@ -1,18 +1,16 @@
-from socket import*
-serverPort=12000
-serverSocket=socket(AF_INET,SOCK_DGRAM)
-serverSocket.bind(("127.0.0.1",serverPort))
-print("the server is ready to recieve")
+from socket import *
+serverName="127.0.0.1"
+serverPort = 12000
+serverSocket = socket(AF_INET,SOCK_STREAM)
+serverSocket.bind((serverName,serverPort))
+serverSocket.listen(1)
 while 1:
-    sentence,clientAddress=serverSocketrecvfrom(2048)
-    sentence=sentence.decode("utf-8")
-    file=open(sentence,"r")
-    l=file.read(2048)
-
-    serverSocket.sendto(bytes(1,"utf-8"),clientAddress)
-
-    print("\nSent contents of",end)
-    print(sentence)
-    #for i in sentence:
-      #printI=(str(i),end=")
-    file.close()
+  print ("The server is ready to receive")
+  connectionSocket, addr = serverSocket.accept()
+  sentence = connectionSocket.recv(1024).decode()
+  file=open(sentence,"r")
+  l=file.read(1024)
+  connectionSocket.send(l.encode())
+  print ('\nSent contents of'+ sentence)
+  file.close()
+  connectionSocket.close()
